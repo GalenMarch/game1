@@ -15,7 +15,7 @@ public class User {
     public int boardWidth;
     public int boardHeight;
     
-    public int width = 50;
+    public int width = 50; 
     public int height = 50;
     
     public int userSpeed = 10;
@@ -58,12 +58,7 @@ public class User {
         } else if (direction.equals("right") && (this.canMoveRightHuh() == false)) {
             return this;
         } else return this;
-    }
-    
-    public boolean wastedHuh() {
-        if (Math.abs(this.posn.x-activeBlocks.))
-    }
-   
+    } 
            
     public WorldImage drawImage() {
         return new RectangleImage(this.posn, this.width, this.height, this.color);

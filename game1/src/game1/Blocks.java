@@ -1,7 +1,6 @@
 package game1;
 
 import java.util.Random;
-import java.util.LinkedList;
 
 import javalib.funworld.*;
 import javalib.colors.*;
@@ -18,27 +17,36 @@ public class Blocks {
     public int width = 50;
     public int height = 50;
     
-    public int blockSpeed = 25;
+    public static int blockSpeed;
     
     public IColor color = new Red();
     
-    public Blocks(Posn posn, int boardWidth, int boardHeight) {
+    public Blocks(Posn posn, int boardWidth, int boardHeight, int blockSpeed) {
         this.posn = posn;
         this.boardWidth = boardWidth;
         this.boardHeight = boardHeight;
+        this.blockSpeed = blockSpeed;
     }
     
     public Blocks fall() {
-        return new Blocks(new Posn((this.posn.x), this.posn.y - blockSpeed),
-                          this.boardWidth, this.boardHeight);
+        return new Blocks(new Posn((this.posn.x), this.posn.y + blockSpeed),
+                          this.boardWidth, this.boardHeight, this.blockSpeed);
     }
     
     public boolean isDeadHuh() {
-        if (posn.y <= 0) {
+        if (posn.y >= 550) {
             return true;
         } else {
             return false;
         }
+    }
+    
+    public boolean hitUserHuh(User user) {
+        if ((Math.abs(this.posn.y - user.posn.y) <= 50)
+                &&
+                (Math.abs(this.posn.x - user.posn.x) <= 50))
+            return true;
+        else return false;   
     }
     
     public WorldImage drawImage() {

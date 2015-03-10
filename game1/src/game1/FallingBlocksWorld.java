@@ -42,17 +42,71 @@ public class FallingBlocksWorld extends World {
     public static final int boardWidth = 500;
     public static final int boardHeight = 500;
     public boolean gameOver;
-    public Random random = new Random();
+    
+    public Posn posn;
     
     public int score;
     public int speed;
     public int frames;
-    public int interval;
-            
+    public int interval;      
     
     public User user;
-    public ActiveBlocks activeBlocks;
     static FallingBlocksWorld world;
+    
+    public Blocks block1 = new Blocks(this.posn, 
+                                      this.boardWidth, 
+                                      this.boardHeight,
+                                      3);
+    
+    public Blocks block2 = new Blocks(this.posn, 
+                                      this.boardWidth, 
+                                      this.boardHeight,
+                                      5);
+    
+    public Blocks block3 = new Blocks(this.posn, 
+                                      this.boardWidth, 
+                                      this.boardHeight,
+                                      6);
+    
+    public Blocks block4 = new Blocks(this.posn, 
+                                      this.boardWidth, 
+                                      this.boardHeight,
+                                      10);
+    
+    public Blocks block5 = new Blocks(this.posn, 
+                                      this.boardWidth, 
+                                      this.boardHeight,
+                                      15);
+    
+    public Blocks block6 = new Blocks(this.posn, 
+                                      this.boardWidth, 
+                                      this.boardHeight,
+                                      17);
+    
+    public Blocks block7 = new Blocks(this.posn, 
+                                      this.boardWidth, 
+                                      this.boardHeight,
+                                      20);
+    
+    public Blocks block8 = new Blocks(this.posn, 
+                                      this.boardWidth, 
+                                      this.boardHeight,
+                                      23);
+    
+    public Blocks block9 = new Blocks(this.posn, 
+                                      this.boardWidth, 
+                                      this.boardHeight,
+                                      25);
+    
+    public Blocks block10 = new Blocks(this.posn, 
+                                      this.boardWidth, 
+                                      this.boardHeight,
+                                      30);
+    
+    public Blocks[] theArray = {block1, block2, block3, block4, block5,
+                                  block6, block7, block8, block9, block10};
+    
+    public ActiveBlocks activeBlocks = new ActiveBlocks(theArray);
     
     public FallingBlocksWorld() {
         this(5); 
@@ -61,29 +115,32 @@ public class FallingBlocksWorld extends World {
     public FallingBlocksWorld(int speed) {
         super();
         this.user = new User(new Posn(250,475), boardWidth, boardHeight);
+        this.activeBlocks = activeBlocks.initialize();
         this.speed = speed;
         this.frames = 0;
         this.score = 0;
         this.gameOver = false;
     }
     
-    public FallingBlocksWorld(User user, int speed, int frames, int score,
-                              int interval, boolean gameOver) {
+    public FallingBlocksWorld(User user, ActiveBlocks activeBlocks, int speed, int frames, 
+            int score, int interval, boolean gameOver) {
         this.user = user;
+        this.activeBlocks = activeBlocks;
         this.speed = speed;
         this.frames = frames;
         this.score = score;
         this.interval = interval;
         this.gameOver = gameOver;
     }
-    
+              
     public World onTick() {
-        return new FallingBlocksWorld(user, speed, frames+1, score+10, interval, gameOver);
+        activeBlocks = activeBlocks.fallBlocks();
+        return new FallingBlocksWorld(user, activeBlocks, speed, frames+1, score+10, interval, gameOver);
     }
     
     public World onKeyEvent(String direction) {
         if (direction.equals("left") || (direction.equals("right"))) {
-            return new FallingBlocksWorld(user.move(direction), speed, frames, score, 
+            return new FallingBlocksWorld(user.move(direction), activeBlocks, speed, frames, score, 
                     interval, gameOver);
         } else {
             return this;
@@ -96,6 +153,14 @@ public class FallingBlocksWorld extends World {
         boardWidth,
         boardHeight,        
         new Black());    
+    } 
+    
+    public WorldImage gameOverScreen() {
+        TextImage gameOver = new TextImage(
+                             new Posn(200,200),
+                             "Better luck next time, pal. Final Score: " + score,
+                             new Red());
+        return new OverlayImages(screen(), gameOver);
     }
     
     public TextImage scoreBox() {
@@ -107,7 +172,8 @@ public class FallingBlocksWorld extends World {
     
     public WorldImage makeImage() {
         return new OverlayImages(screen(), new OverlayImages(scoreBox(),
-                                           user.drawImage()));
+                                           new OverlayImages(user.drawImage(),
+                                           activeBlocks.drawImage()))); 
     }
     
     public static void main(String[] args) { 
