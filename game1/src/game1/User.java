@@ -1,8 +1,5 @@
 package game1;
 
-import java.util.Random;
-import java.util.LinkedList;
-
 import javalib.funworld.*;
 import javalib.colors.*;
 import javalib.worldcanvas.*;
@@ -14,6 +11,10 @@ public class User {
     
     public int boardWidth;
     public int boardHeight;
+    
+    // The variables below specify the constants of the user block.  The user
+    // will control a 50 pixel X 50 pixel green block that always moves at 
+    // a speed of 10 pixels per keystroke.
     
     public int width = 50; 
     public int height = 50;
@@ -29,7 +30,9 @@ public class User {
         this.boardHeight = boardHeight;
     }
     
-        
+    // The two methods below are used in the method move() to keep the 
+    // edges of the block from going out of bounds.
+    
     public boolean canMoveRightHuh() {
         if (posn.x >= boardWidth-25) {
             return false;
@@ -45,6 +48,10 @@ public class User {
             return true;
         }
     }
+    
+    // If the user tries to move right or left when it is at the respective 
+    // edge of the playing field, it will just simply be returned at its 
+    // current position.
     
     public User move(String direction) {
         if (direction.equals("left") && (this.canMoveLeftHuh() == true)) {
@@ -62,5 +69,9 @@ public class User {
            
     public WorldImage drawImage() {
         return new RectangleImage(this.posn, this.width, this.height, this.color);
+    }
+    
+    public String toString() {
+        return ("X pos: " + this.posn.x + " y pos: " + this.posn.y);
     }
 }
