@@ -1,5 +1,7 @@
 package game1;
 
+import tester.*;
+
 import java.util.Random; 
 
 import javalib.funworld.*;
@@ -231,8 +233,12 @@ public class FallingBlocksWorld extends World {
     }
      
     public static void main(String[] args) { 
+
+//        Tester.runReport(new Testing(), false, false);
+        
         FallingBlocksWorld theWorld = new FallingBlocksWorld();
         theWorld.bigBang(boardWidth,boardHeight,0.15);    
+        
     }
    
 }
